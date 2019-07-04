@@ -32,12 +32,33 @@ def add_task(id: str, content: str, date_created: str):
     update_tasks(db)
 
 
-# def delete_task(id: str):
-#     db = get_data()
-#     for task in db[tasks]:
-#         if task['id'] == id:
-        
+def get_task(id: str):
+    db = get_tasks()
+    for task in db['tasks']:
+        if task['id'] == id:
+            return task
+    return None
 
+
+def delete_task(id: str):
+    db = get_tasks()
+    counter = 0
+    for task in db['tasks']:
+        if task['id'] == id:
+            del db['tasks'][counter]
+            update_tasks(db)
+            break
+        counter += 1
+        
+def update_task(id: str, content: str):
+    db = get_tasks()
+    counter = 0
+    for task in db['tasks']:
+        if task['id'] == id:
+            db['tasks'][counter]['content'] = content
+            update_tasks(db)
+            break
+        counter += 1
 
 class Task:
     def __init__(self, content):
@@ -48,3 +69,4 @@ class Task:
     def commit(self):
         add_task(self.id, self.content, self.date_created)
     
+

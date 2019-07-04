@@ -17,6 +17,25 @@ def index():
         return render_template('index.html', tasks=data['tasks'])
 
 
+@app.route('/delete/<id>')
+def delete(id):
+    task_to_delete = get_task(id)
+    if task_to_delete is not None:
+        delete_task(id)
+    return redirect('/')
+
+
+@app.route('/update/<id>', methods=['POST', 'GET'])
+def update(id):
+    if request.method == 'POST':
+        task_content = request.form['content']
+        update_task(id, task_content)
+        return redirect('/')
+    else:
+        task = get_task(id)
+        return render_template('update.html', task=task)
+
+
 @app.errorhandler(404)
 def not_found(error):
     """ error handler """
